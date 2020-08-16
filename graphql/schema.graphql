@@ -3,21 +3,23 @@ scalar Date
 scalar DateTime
 
 
-type User {
-    id: Int!,
-    pw: String!,
-    name: String!,
-    salt: String!,
+type SaleInfo {
+    seq: Int!,
+    from: String!,
+    subject: String!,
+    content: String,
+    view: Int,
+    like: Int,
     regdate: Date
 }
 
-
 #################Query And Mutation#################
 type Query {
-    selectUser(id: Int!): [User]!
+    selectSaleInfos(page: Int!): [SaleInfo]!,
+    selectSaleInfo(seq: Int!): SaleInfo
 }
 
-type Mutation {
-    addUser(id: Int!, pw: String!, name: String!): Boolean!
-}
+# type Mutation {
+#     addUser(id: Int!, pw: String!, name: String!): Boolean!
+# }
 

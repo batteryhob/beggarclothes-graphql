@@ -1,20 +1,32 @@
 import {
-    selectUser,
-    addUser   
+    selectSaleInfos,
+    selectSaleInfo
+    // viewSaleInfo,
+    // likeSaleInfo,
+    // unLikeSaleInfo   
 } from  "./db"
 
 
 const resolvers = {
     Query: {
-        selectUser: (_, { id }) => {
-            return selectUser(id)
+        selectSaleInfos: (_, { page }) => {
+            return selectSaleInfos(page)
+        },
+        selectSaleInfo: (_, { seq }) => {
+            return selectSaleInfo(seq)
         }
     },
-    Mutation: {
-        addUser: (_, { id, pw, name }) => {
-            return addUser(id, pw, name )
-        }
-    }
+    // Mutation: {
+    //     viewSaleInfo: (_, { seq }) => {
+    //         return viewSaleInfo(seq)
+    //     },
+    //     likeSaleInfo: (_, { seq }) => {
+    //         return likeSaleInfo(seq)
+    //     },
+    //     unLikeSaleInfo: (_, { seq }) => {
+    //         return unLikeSaleInfo(seq)
+    //     }
+    // }
 }
 
 export default resolvers

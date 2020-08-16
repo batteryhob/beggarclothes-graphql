@@ -1,11 +1,13 @@
 import mysql from "mysql2/promise";
-import { dbConfig } from "../config/db.config";
+import dbConfig from "../config/db.config";
 import bcrypt from 'bcryptjs'
+
 
 // connection pool 생성
 // https://github.com/sidorares/node-mysql2 참조
 const pool = mysql.createPool({
     host: dbConfig.host,
+    port: dbConfig.port,
     user: dbConfig.user,
     password: dbConfig.password,
     database: dbConfig.database,
@@ -18,53 +20,45 @@ const pool = mysql.createPool({
  //암호화
 const saltRounds = 8;
 
-// 데이터 조회 샘플 (패스워드 암호화)
-export const selectUser = async (id) => {    
+
+//세일정보가져오기
+export const selectSaleInfos = async (page) => {
 
     const [datas] = await pool.query(`
         SELECT 
-        *
-        FROM 
-        tbl_user 
-        WHERE id = '${id}'
+        seq,
+        \`from\`,
+        subject,
+        content,
+        regdate
+        FROM tbl_saleinfo
+        WHERE saleflag = true
         ORDER BY regdate DESC
-        LIMIT 1
+        LIMIT 10
     `);
 
-    return datas;
-};
+    return datas; 
+}
 
-
-// 데이터 등록 샘플(패스워드 암호화)
-export const addUser = async (id, pw, name) => {
+export const selectSaleInfo = async (seq) => {
 
     try{
 
-        //pw암호화
-        const salt = await bcrypt.genSalt(saltRounds)
-        const hashword = await bcrypt.hash(pw, salt)
-        await pool.query(`
-            INSERT INTO tbl_user (
-                id,
-                pw,
-                name,
-                salt,
-                regdate   
-            ) VALUES (
-                '${id}',
-                '${hashword}',
-                '${name}',
-                '${salt}',
-                NOW()
-            )
+        const [data] = await pool.query(`
+            SELECT 
+            seq,
+            \`from\`,
+            subject,
+            content,
+            regdate
+            FROM tbl_saleinfo
+            WHERE seq = ${seq}
+            LIMIT 1
         `);
 
-        return true;
+        return data[0];
 
-    }catch(e) {
-
-        console.log("ERROR:" + e );
-        return false;
-
+    }catch(e){
+        return null;
     }
-};
+}
