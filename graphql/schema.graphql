@@ -1,0 +1,23 @@
+#데이트 타입을 지원하지 않기 때문에 기본 설정
+scalar Date
+scalar DateTime
+
+
+type User {
+    id: Int!,
+    pw: String!,
+    name: String!,
+    salt: String!,
+    regdate: Date
+}
+
+
+#################Query And Mutation#################
+type Query {
+    selectUser(id: Int!): [User]!
+}
+
+type Mutation {
+    addUser(id: Int!, pw: String!, name: String!): Boolean!
+}
+

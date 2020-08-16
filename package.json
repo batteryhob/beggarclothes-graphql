@@ -1,0 +1,22 @@
+{
+  "name": "solution_ml_wallhack_graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "ssh://git@gitlab.nexon.com:8022/da_div/solution_ml_wallhack_graphql.git",
+  "author": "jeonjiho <batteryho@nexon.co.kr>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "graphql-yoga": "^1.18.3",
+    "mysql2": "^2.0.2",
+    "uuid": "^3.3.3"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1"
+  }
+}
