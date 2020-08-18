@@ -1,4 +1,7 @@
 import {
+    selectFeeds,
+    selectFeed,
+    selectFeedImgs,
     selectSaleInfos,
     selectSaleInfo
     // viewSaleInfo,
@@ -9,6 +12,15 @@ import {
 
 const resolvers = {
     Query: {
+        selectFeeds: (_, { page }) => {
+            return selectFeeds(page)
+        },
+        selectFeed: (_, { seq }) => {
+            return selectFeed(seq)
+        },
+        selectFeedImgs: (_, { seq }) => {
+            return selectFeedImgs(seq)
+        },
         selectSaleInfos: (_, { page }) => {
             return selectSaleInfos(page)
         },

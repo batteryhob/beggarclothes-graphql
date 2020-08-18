@@ -13,8 +13,38 @@ type SaleInfo {
     regdate: Date
 }
 
+type Feed {
+    seq: Int!,
+    newflag: Int,
+    hot: Int,
+    recommend: Int,
+    designer_seq: Int,
+    name: String,
+    currency: String,
+    before: Int,
+    after: Int,
+    link: String,
+    desc: String,
+    designer_point: Int,
+    price_point: Int,
+    essential_point: Int,
+    mainimage: String,
+    designer: String,
+    designer_kor: String,
+}
+
+type FeedImg {
+    seq: Int!,
+    feed_seq: Int!,
+    url: String
+}
+
 #################Query And Mutation#################
 type Query {
+    selectFeeds(page: Int!): [Feed]!,
+    selectFeed(seq: Int!): Feed,
+    selectFeedImgs(seq: Int!): [FeedImg],
+
     selectSaleInfos(page: Int!): [SaleInfo]!,
     selectSaleInfo(seq: Int!): SaleInfo
 }
