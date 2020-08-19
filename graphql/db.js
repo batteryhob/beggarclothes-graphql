@@ -20,7 +20,68 @@ const pool = mysql.createPool({
  //암호화
 const saltRounds = 8;
 
-//피드가져오기
+
+//순위
+//커뮤니티리스트 가져오기
+export const selectCommunityList = async () => {
+
+    const [datas] = await pool.query(`
+        select
+        seq,
+        url,
+        \`name\`,
+        \`desc\`
+        from tbl_community
+    `);
+
+    return datas;
+}
+//커뮤니티별 브랜드 순위 가져오기
+export const selectDailyRank = async (cseq, date) => {
+
+    const [datas] = await pool.query(`
+        select
+        designer,
+        (cnt * view) as computed
+        from tbl_designer_agg
+        where community_seq = ${cseq} and date = '${date}'
+        order by computed desc
+        limit 10
+    `);
+
+    return datas;
+}
+//디자이너별 일간 순위 가져오기
+export const selectSequenceRank = async (cseq, designer) => {
+
+    const [datas] = await pool.query(`
+        SELECT
+        A.designer,
+        A.date,
+        (
+            SELECT rank FROM (
+                SELECT 
+                RANK() OVER (PARTITION BY date ORDER BY (cnt * view) DESC) AS rank,
+                designer,
+                date
+                FROM tbl_designer_agg 
+                where community_seq = ${cseq}
+                ORDER BY (cnt * view) desc
+            ) t where designer = A.designer AND date = A.date
+            
+        ) as rank,
+        (cnt * view) as computed
+        from tbl_designer_agg A
+        where community_seq = ${cseq} AND designer = '${designer}'
+        order by date desc
+        LIMIT 10
+    `);
+
+    return datas;
+}
+
+
+//피드정보
 export const selectFeeds = async (page) => {
 
     const [datas] = await pool.query(`
@@ -60,7 +121,6 @@ export const selectFeeds = async (page) => {
 
     return datas;
 }
-
 export const selectFeed = async (seq) => {
 
     try{
@@ -80,7 +140,6 @@ export const selectFeed = async (seq) => {
     }
 
 }
-
 export const selectFeedImgs = async (seq) => {
 
     try{
@@ -100,7 +159,8 @@ export const selectFeedImgs = async (seq) => {
 
 }
 
-//세일정보가져오기
+
+//세일정보
 export const selectSaleInfos = async (page) => {
 
     const [datas] = await pool.query(`
@@ -118,7 +178,6 @@ export const selectSaleInfos = async (page) => {
 
     return datas; 
 }
-
 export const selectSaleInfo = async (seq) => {
 
     try{

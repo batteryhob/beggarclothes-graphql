@@ -1,9 +1,15 @@
 import {
+    selectCommunityList,
+    selectDailyRank,
+    selectSequenceRank,
+
     selectFeeds,
     selectFeed,
     selectFeedImgs,
+
     selectSaleInfos,
     selectSaleInfo
+
     // viewSaleInfo,
     // likeSaleInfo,
     // unLikeSaleInfo   
@@ -12,6 +18,16 @@ import {
 
 const resolvers = {
     Query: {
+        selectCommunityList: (_, {}) => {
+            return selectCommunityList()
+        },
+        selectDailyRank: (_, { cseq, date }) => {
+            return selectDailyRank(cseq, date)
+        },
+        selectSequenceRank: (_, { cseq, designer }) => {
+            return selectSequenceRank(cseq, designer)
+        },
+
         selectFeeds: (_, { page }) => {
             return selectFeeds(page)
         },
@@ -21,6 +37,7 @@ const resolvers = {
         selectFeedImgs: (_, { seq }) => {
             return selectFeedImgs(seq)
         },
+
         selectSaleInfos: (_, { page }) => {
             return selectSaleInfos(page)
         },
