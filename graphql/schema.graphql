@@ -6,7 +6,8 @@ type Community {
     seq: Int!,
     url: String!,
     name: String!,
-    desc: String
+    desc: String,
+    ranks: [Rank]
 }
 
 type Rank {
@@ -20,8 +21,6 @@ type Sequence {
     rank: Int!,
     computed: Int!
 }
-
-designer
 
 type Feed {
     seq: Int!,
@@ -41,6 +40,7 @@ type Feed {
     mainimage: String,
     designer: String,
     designer_kor: String,
+    imgs: [FeedImg]
 }
 
 type FeedImg {
@@ -62,8 +62,8 @@ type SaleInfo {
 #################Query And Mutation#################
 type Query {
     # 디자이너 탭
-    selectCommunityList(): [Community]!,
-    selectDailyRank(cseq: Int!, date: String!): [Rank]!,
+    selectCommunityList: [Community]!,
+    selectWeeklyRank(cseq: Int!): [Rank]!,
     selectSequenceRank(cseq: Int!, designer: String!): [Sequence]!,
     # 추천 탭
     selectFeeds(page: Int!): [Feed]!,

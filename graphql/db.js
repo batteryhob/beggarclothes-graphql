@@ -20,33 +20,32 @@ const pool = mysql.createPool({
  //암호화
 const saltRounds = 8;
 
-
 //순위
 //커뮤니티리스트 가져오기
 export const selectCommunityList = async () => {
 
     const [datas] = await pool.query(`
         select
-        seq,
-        url,
-        \`name\`,
-        \`desc\`
+            seq,
+            url,
+            \`name\`,
+            \`desc\`
         from tbl_community
     `);
 
     return datas;
 }
 //커뮤니티별 브랜드 순위 가져오기
-export const selectDailyRank = async (cseq, date) => {
+export const selectWeeklyRank = async (cseq) => {
 
     const [datas] = await pool.query(`
-        select
-        designer,
-        (cnt * view) as computed
+        select 
+            designer, 
+            sum(cnt * view) as computed
         from tbl_designer_agg
-        where community_seq = ${cseq} and date = '${date}'
-        order by computed desc
-        limit 10
+        where community_seq = ${cseq} and \`date\` > date_add(NOW(),interval-7 day)
+        group by designer
+        order by (sum(cnt * view)) desc
     `);
 
     return datas;
@@ -63,7 +62,7 @@ export const selectSequenceRank = async (cseq, designer) => {
                 SELECT 
                 RANK() OVER (PARTITION BY date ORDER BY (cnt * view) DESC) AS rank,
                 designer,
-                date
+                \`date\`
                 FROM tbl_designer_agg 
                 where community_seq = ${cseq}
                 ORDER BY (cnt * view) desc
@@ -126,10 +125,38 @@ export const selectFeed = async (seq) => {
     try{
 
         const [data] = await pool.query(`
-            SELECT 
-            *
-            FROM tbl_feed
-            WHERE seq = ${seq}
+            select 
+            A.seq,
+            newflag,
+            hot,
+            recommend,
+            designer_seq,
+            A.\`name\`,
+            currency,
+            \`before\`,
+            \`after\`,
+            link,
+            \`desc\`,
+            designer_point,
+            price_point,
+            essential_point,
+            url as mainimage,
+            C.\`name\` as designer,
+            C.korean as designer_kor
+            from tbl_feed A
+            left join (
+                select 
+                feed_seq,
+                url
+                from tbl_feed_imgs
+                group by feed_seq
+            ) B
+            on A.seq = B.feed_seq
+            left join (
+                select seq, \`name\`, korean from tbl_designer
+            ) C
+            on A.designer_seq = C.seq
+            WHERE A.seq = ${seq}
             LIMIT 1
         `);
 

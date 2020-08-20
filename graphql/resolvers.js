@@ -1,6 +1,6 @@
 import {
     selectCommunityList,
-    selectDailyRank,
+    selectWeeklyRank,
     selectSequenceRank,
 
     selectFeeds,
@@ -21,8 +21,8 @@ const resolvers = {
         selectCommunityList: (_, {}) => {
             return selectCommunityList()
         },
-        selectDailyRank: (_, { cseq, date }) => {
-            return selectDailyRank(cseq, date)
+        selectWeeklyRank: (_, { cseq }) => {
+            return selectWeeklyRank(cseq)
         },
         selectSequenceRank: (_, { cseq, designer }) => {
             return selectSequenceRank(cseq, designer)
@@ -45,6 +45,16 @@ const resolvers = {
             return selectSaleInfo(seq)
         }
     },
+    Community: {
+        ranks(parent) {
+            return selectWeeklyRank(parent.seq)
+        }
+    },
+    Feed: {
+        imgs(parent){
+            return selectFeedImgs(parent.seq)
+        }
+    }
     // Mutation: {
     //     viewSaleInfo: (_, { seq }) => {
     //         return viewSaleInfo(seq)
