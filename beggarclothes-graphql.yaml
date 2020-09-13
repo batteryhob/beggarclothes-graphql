@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beggarclothes-graphql-service
+spec:
+  selector:
+    app: beggarclothes-graphql
+    tier: be
+  ports:
+  - port: 9001
+    protocol: "TCP"
+    targetPort: 4000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beggarclothes-graphql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: beggarclothes-graphql
+      tier: be
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: beggarclothes-graphql
+        tier: be
+    spec:
+      containers:
+      - name: graphql
+        image: "batteryho/beggarclothes-graphql:latest"
+        ports:
+        - containerPort: 4000

@@ -99,6 +99,9 @@ export const selectFeeds = async (page) => {
         designer_point,
         price_point,
         essential_point,
+        daily_point,
+        A.\`view\`,
+        A.\`like\`,
         url as mainimage,
         C.\`name\` as designer,
         C.korean as designer_kor
@@ -140,6 +143,9 @@ export const selectFeed = async (seq) => {
             designer_point,
             price_point,
             essential_point,
+            daily_point,
+            A.\`view\`,
+            A.\`like\`,
             url as mainimage,
             C.\`name\` as designer,
             C.korean as designer_kor
@@ -185,7 +191,39 @@ export const selectFeedImgs = async (seq) => {
     }
 
 }
-
+export const viewFeed = async (seq) => {
+    try{
+        await pool.query(`
+            UPDATE tbl_feed SET \`view\` = (\`view\` + 1)
+            WHERE seq = '${seq}'
+        `);
+        return true;
+    }catch(e){
+        return false;
+    }
+}
+export const likeFeed = async (seq) => {
+    try{
+        await pool.query(`
+            UPDATE tbl_feed SET \`like\` = (\`like\` + 1)
+            WHERE seq = '${seq}'
+        `);
+        return true;
+    }catch(e){
+        return false;
+    }
+}
+export const unLikeFeed = async (seq) => {
+    try{
+        await pool.query(`
+            UPDATE tbl_feed SET \`like\` = (\`like\` - 1)
+            WHERE seq = '${seq}'
+        `);
+        return true;
+    }catch(e){
+        return false;
+    }
+}
 
 //세일정보
 export const selectSaleInfos = async (page) => {

@@ -8,11 +8,11 @@ import {
     selectFeedImgs,
 
     selectSaleInfos,
-    selectSaleInfo
+    selectSaleInfo,
 
-    // viewSaleInfo,
-    // likeSaleInfo,
-    // unLikeSaleInfo   
+    viewFeed,
+    likeFeed,
+    unLikeFeed
 } from  "./db"
 
 
@@ -54,18 +54,18 @@ const resolvers = {
         imgs(parent){
             return selectFeedImgs(parent.seq)
         }
+    },
+    Mutation: {
+        viewFeed: (_, { seq }) => {
+            return viewFeed(seq)
+        },
+        likeFeed: (_, { seq }) => {
+            return likeFeed(seq)
+        },
+        unLikeFeed: (_, { seq }) => {
+            return unLikeFeed(seq)
+        }
     }
-    // Mutation: {
-    //     viewSaleInfo: (_, { seq }) => {
-    //         return viewSaleInfo(seq)
-    //     },
-    //     likeSaleInfo: (_, { seq }) => {
-    //         return likeSaleInfo(seq)
-    //     },
-    //     unLikeSaleInfo: (_, { seq }) => {
-    //         return unLikeSaleInfo(seq)
-    //     }
-    // }
 }
 
 export default resolvers

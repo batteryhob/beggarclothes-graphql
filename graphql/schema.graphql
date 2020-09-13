@@ -37,6 +37,9 @@ type Feed {
     designer_point: Int,
     price_point: Int,
     essential_point: Int,
+    daily_point: Int,
+    view: Int,
+    like: Int,
     mainimage: String,
     designer: String,
     designer_kor: String,
@@ -74,7 +77,9 @@ type Query {
     selectSaleInfo(seq: Int!): SaleInfo
 }
 
-# type Mutation {
-#     addUser(id: Int!, pw: String!, name: String!): Boolean!
-# }
+type Mutation {
+    viewFeed(seq: Int!): Boolean!,
+    likeFeed(seq: Int!): Boolean!,
+    unLikeFeed(seq: Int!): Boolean!
+}
 
